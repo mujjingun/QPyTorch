@@ -6,29 +6,10 @@ import numpy as np
 from torch.utils.cpp_extension import load
 import os
 
-current_path = os.path.dirname(os.path.realpath(__file__))
-quant_cpu = load(
-    name="quant_cpu",
-    sources=[
-        os.path.join(current_path, "quant_cpu/quant_cpu.cpp"),
-        os.path.join(current_path, "quant_cpu/bit_helper.cpp"),
-        os.path.join(current_path, "quant_cpu/sim_helper.cpp"),
-    ],
-)
+import quant_cpu
 
 if torch.cuda.is_available():
-    quant_cuda = load(
-        name="quant_cuda",
-        sources=[
-            os.path.join(current_path, "quant_cuda/quant_cuda.cpp"),
-            os.path.join(current_path, "quant_cuda/bit_helper.cu"),
-            os.path.join(current_path, "quant_cuda/sim_helper.cu"),
-            os.path.join(current_path, "quant_cuda/block_kernel.cu"),
-            os.path.join(current_path, "quant_cuda/float_kernel.cu"),
-            os.path.join(current_path, "quant_cuda/fixed_point_kernel.cu"),
-            os.path.join(current_path, "quant_cuda/quant.cu"),
-        ],
-    )
+    import quant_cuda
 else:
     quant_cuda = quant_cpu
 
